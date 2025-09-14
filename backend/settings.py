@@ -74,12 +74,17 @@ USE_TZ = True
 
 # ADD THESE LINES AT THE END:
 # CORS settings for frontend
+# Add your production frontend URL to CORS_ALLOWED_ORIGINS
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3001",  # Your frontend port
-    "http://127.0.0.1:3001",
-    "https://viligante-scanner.vercel.app",  # Your production frontend
+    "http://localhost:3001",
+    "http://127.0.0.1:3001", 
+    "https://viligante-scanner-5406m46rf-saranyadharani84-3817s-projects.vercel.app",  # ADD THIS
+    "https://viligante-scanner.vercel.app",  # AND THIS
 ]
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://viligante-scanner-5406m46rf-saranyadharani84-3817s-projects.vercel.app",
+    "https://viligante-scanner.vercel.app",
+]
 CORS_ALLOW_CREDENTIALS = True
 
 # REST framework settings
