@@ -23,10 +23,10 @@ INSTALLED_APPS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'db.sqlite3'),
-        'USER': os.environ.get('POSTGRES_USER', 'user'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
-        'HOST': os.environ.get('RAILWAY_PRIVATE_DOMAIN', 'localhost'),
+        'NAME': os.environ.get('POSTGRES_DB', 'db.sqlite3'),      # CORRECT
+        'USER': os.environ.get('POSTGRES_USER', 'user'),          # CORRECT
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'), # CORRECT
+        'HOST': os.environ.get('RAILWAY_PRIVATE_DOMAIN', 'localhost'), # CORRECT
         'PORT': os.environ.get('PGPORT', '5432'),
     }
 }
