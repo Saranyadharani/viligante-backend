@@ -1,3 +1,8 @@
+import os  # ADD THIS LINE
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # ADD THIS LINE
+
 DEBUG = True
 SECRET_KEY = 'temporary-secret-key-change-this-later'
 INSTALLED_APPS = [
@@ -14,10 +19,15 @@ INSTALLED_APPS = [
     'scanner',
 ]
 
+# Use PostgreSQL for production (Railway automatically provides these env variables)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('PGDATABASE', 'db.sqlite3'),
+        'USER': os.environ.get('PGUSER', ''),
+        'PASSWORD': os.environ.get('PGPASSWORD', ''),
+        'HOST': os.environ.get('PGHOST', ''),
+        'PORT': os.environ.get('PGPORT', ''),
     }
 }
 
@@ -54,6 +64,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # ADD THIS LINE
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
@@ -62,10 +73,11 @@ USE_I18N = True
 USE_TZ = True
 
 # ADD THESE LINES AT THE END:
-# CORS settings for frontend on port 3001
+# CORS settings for frontend
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3001",  # Your frontend port
     "http://127.0.0.1:3001",
+    "https://viligante-scanner.vercel.app",  # Your production frontend
 ]
 
 CORS_ALLOW_CREDENTIALS = True
