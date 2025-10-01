@@ -1,10 +1,13 @@
-import os  # ADD THIS LINE
+import os
+import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # ADD THIS LINE
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-DEBUG = True
-SECRET_KEY = 'temporary-secret-key-change-this-later'
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'temporary-secret-key-change-this-later')
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -12,23 +15,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',  # CORS headers
-    'rest_framework',  # Django REST framework
+    'corsheaders',
+    'rest_framework',
     'authentication',
     'auth_app',
     'scanner',
 ]
 
-# Use PostgreSQL for production (Railway automatically provides these env variables)
+# SIMPLE POSTGRESQL CONFIG - NO SQLITE FALLBACK
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'db.sqlite3'),      # CORRECT
-        'USER': os.environ.get('POSTGRES_USER', 'user'),          # CORRECT
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'), # CORRECT
-        'HOST': os.environ.get('RAILWAY_PRIVATE_DOMAIN', 'localhost'), # CORRECT
-        'PORT': os.environ.get('PGPORT', '5432'),
-    }
+    'default': dj_database_url.config()
 }
 
 # FIXED MIDDLEWARE - CORS MUST BE AT THE TOP!
@@ -42,6 +38,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+ROOT_URLCONF = 'backend.urls'
+WSGI_APPLICATION = 'backend.wsgi.application'
 
 TEMPLATES = [
     {
@@ -59,12 +58,9 @@ TEMPLATES = [
     },
 ]
 
-ROOT_URLCONF = 'backend.urls'
-WSGI_APPLICATION = 'backend.wsgi.application'
-
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # ADD THIS LINE
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
@@ -72,19 +68,27 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ADD THESE LINES AT THE END:
-# CORS settings for frontend
-# Add your production frontend URL to CORS_ALLOWED_ORIGINS
+# CORS settings for frontend - UPDATED ALLOWED_HOSTS
+ALLOWED_HOSTS = [
+    'viligante-backend-production.up.railway.app',
+    'localhost',
+    '127.0.0.1',
+    '.railway.app'  # ADDED
+]
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3001",
     "http://127.0.0.1:3001", 
-    "https://viligante-scanner-5406m46rf-saranyadharani84-3817s-projects.vercel.app",  # ADD THIS
-    "https://viligante-scanner.vercel.app",  # AND THIS
-]
-CSRF_TRUSTED_ORIGINS = [
     "https://viligante-scanner-5406m46rf-saranyadharani84-3817s-projects.vercel.app",
     "https://viligante-scanner.vercel.app",
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://viligante-scanner-5406m46rf-saranyadharani84-3817s-projects.vercel.app",
+    "https://viligante-scanner.vercel.app",
+    "https://viligante-backend-production.up.railway.app"  # ADDED
+]
+
 CORS_ALLOW_CREDENTIALS = True
 
 # REST framework settings
