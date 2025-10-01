@@ -8,3 +8,4 @@ python-whois==0.9.5
 requests==2.32.4 
 psycopg2-binary==2.9.10 
 psycopg2-binary==2.9.10 
+dj-database-url==2.1.0
